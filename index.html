@@ -270,10 +270,11 @@ function sendMessage() {
 async function getBotReply(userText) {
   try {
     const res = await fetch("/.netlify/functions/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userText })
-    });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: userText })
+});
+
     const data = await res.json();
     return data.reply;
   } catch (err) {
