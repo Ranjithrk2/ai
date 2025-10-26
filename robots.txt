@@ -1,0 +1,14 @@
+# robots.txt for Mr Tech Lab
+User-agent: *
+Allow: /
+
+# Block admin or backend (if any)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /backend/
+
+# Sitemap for Google
+Sitemap: https://mrtechlab.in/sitemap.xml
+
+# Crawl-delay (for server load management)
+Crawl-delay: 10
