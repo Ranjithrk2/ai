@@ -269,12 +269,11 @@ function sendMessage() {
 
 async function getBotReply(userText) {
   try {
-    const res = await fetch("/.netlify/functions/chat", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ message: userText })
-});
-
+    const res = await fetch("/.netlify/functions/chat", {  // note the path
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: userText })
+    });
     const data = await res.json();
     return data.reply;
   } catch (err) {
@@ -282,6 +281,7 @@ async function getBotReply(userText) {
     return "Sorry, I'm having trouble responding right now.";
   }
 }
+
 
 
 
