@@ -228,17 +228,17 @@ const sendBtn = document.getElementById("chat-send");
 const inputField = document.getElementById("chat-input");
 const chatMessages = document.getElementById("chat-messages");
 
-// Show welcome message
+// Welcome message
 addMessage("Hi! I am MrTechLab AI Assistant. How can I help you today?", "bot");
 
+// Toggle chat
 toggleBtn.addEventListener("click", () => {
   chatWidget.style.display = chatWidget.style.display === "flex" ? "none" : "flex";
 });
 
+// Send message
 sendBtn.addEventListener("click", sendMessage);
-inputField.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") sendMessage();
-});
+inputField.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
 
 function addMessage(text, sender) {
   const msg = document.createElement("div");
@@ -248,7 +248,7 @@ function addMessage(text, sender) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function sendMessage() {
+async function sendMessage() {
   const text = inputField.value.trim();
   if (!text) return;
   addMessage(text, "user");
@@ -260,30 +260,24 @@ function sendMessage() {
   chatMessages.appendChild(loadingMsg);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
-  setTimeout(async () => {
-    loadingMsg.remove();
-    const reply = await getBotReply(text);
-    addMessage(reply, "bot");
-  }, 1000);
-}
-
-async function getBotReply(userText) {
   try {
-    const res = await fetch("/.netlify/functions/chat", {  // note the path
+    const res = await fetch("/.netlify/functions/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userText })
+      body: JSON.stringify({ message: text }),
     });
+
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
     const data = await res.json();
-    return data.reply;
+    loadingMsg.remove();
+    addMessage(data.reply || "Sorry, I couldn't understand that.", "bot");
   } catch (err) {
-    console.error("Error:", err);
-    return "Sorry, I'm having trouble responding right now.";
+    console.error(err);
+    loadingMsg.remove();
+    addMessage("Oops! Something went wrong.", "bot");
   }
 }
-
-
-
 
 </script>
 
